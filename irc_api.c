@@ -1,11 +1,11 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_api.c,v 1.3 1997/03/01 20:06:11 tri Exp $
+ *  $Id: irc_api.c,v 1.4 1997/03/02 10:30:43 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Sat Mar  1 20:01:38 1997 tri
+ *  Last modified: Sun Mar  2 12:20:28 1997 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997
  *  Timo J. Rinne <tri@iki.fi>
@@ -150,7 +150,7 @@ int irc_add_known_key(char *key)
     return 1;
 }
 
-int irc_delete_all_keys()
+int irc_delete_all_known_keys()
 {
     int i;
 
@@ -159,11 +159,25 @@ int irc_delete_all_keys()
 	free(known_keys[i].fingerprint);
     }
     num_known_keys = 0;
+    return 1;
+}
+
+int irc_delete_all_default_keys()
+{
+    int i;
+
     for (i = 0; i < num_default_keys; i++) {
 	free(default_keys[i].key);
 	free(default_keys[i].addr);
     }
     num_default_keys = 0;
+    return 1;
+}
+
+int irc_delete_all_keys()
+{
+    irc_delete_all_default_keys();
+    irc_delete_all_known_keys();
     return 1;
 }
 
