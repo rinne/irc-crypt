@@ -1,11 +1,11 @@
 /*   -*- c -*-
  *  
- *  $Id: circ_shell.c,v 1.5 1997/05/06 07:45:56 tri Exp $
+ *  $Id: circ_shell.c,v 1.6 1999/01/06 13:10:48 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Tue May  6 10:45:25 1997 tri
+ *  Last modified: Sun Oct 12 17:00:48 1997 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997
  *  Timo J. Rinne <tri@iki.fi>
@@ -193,9 +193,28 @@ void cmd_decrypt(char *rest)
     return;
 }
 
+void cmd_version(char *rest)
+{
+    int version, r;
+    char buf[64];
+
+    version = atoi(rest);
+
+    r = irc_set_key_expand_version(version);
+
+    if (r == 0) {
+	sprintf(buf, "method = %d", irc_key_expand_version());
+	response(3, "Syntax error", 0, buf, "VERSION");
+    } else {
+	sprintf(buf, "new method = %d, old method = %d", version, r);
+	response(0, NULL, 0, buf, "VERSION");
+    }
+    return;
+}
+
 void cmd_help(char *rest)
 {
-    printf("  Commands: ADDKEY, DELETEKEY, ENCRYPT, DECRYPT, HELP, QUIT\n\n");
+    printf("  Commands: ADDKEY, DELETEKEY, ENCRYPT, DECRYPT, VERSION, HELP, QUIT\n\n");
     printf("    ADDKEY DECRYPT :key\n");
     printf("    Add key (string after colon) to the known key pool.\n\n");
     printf("    ADDKEY DEFAULT address :key\n");
@@ -211,6 +230,8 @@ void cmd_help(char *rest)
     printf("    Embed nick into the message.\n\n");
     printf("    DECRYPT :message\n");
     printf("    Decrypt message if possible.\n\n");
+    printf("    VERSION #\n");
+    printf("    Set default key expand version to # (1 or 2)\n\n");
     printf("    HELP\n");
     printf("    Get this help\n\n");
     printf("    QUIT\n");
@@ -254,6 +275,8 @@ main()
 	    cmd_encrypt(rest);
 	else if (strciequal("decrypt", cmd))
 	    cmd_decrypt(rest);
+	else if (strciequal("version", cmd))
+	    cmd_version(rest);
 	else if (strciequal("help", cmd))
 	    cmd_help(rest);
 	else
