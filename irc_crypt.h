@@ -1,13 +1,13 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_crypt.h,v 1.2 1997/03/02 10:30:43 tri Exp $
+ *  $Id: irc_crypt.h,v 1.3 1999/01/06 13:19:47 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Sun Mar  2 12:29:29 1997 tri
+ *  Last modified: Wed Jan  6 15:19:32 1999 tri
  *  ----------------------------------------------------------------------
- *  Copyright © 1997
+ *  Copyright © 1997, 1999
  *  Timo J. Rinne <tri@iki.fi>
  * 
  *  Address: Cirion oy, PO-BOX 250, 00121 Helsinki, Finland
@@ -91,5 +91,16 @@ int irc_decrypt_message(char *msg,
  * Return non-nil if message is in valid crypto message format.
  */
 int irc_is_encrypted_message_p(char *msg);
+
+/*
+ * Set default key expand version to n.
+ * Valid versions are 1, 2 and 3.  Default is 3.
+ */
+int irc_set_key_expand_version(int n);
+
+/*
+ * Return current default key expand version.
+ */
+int irc_key_expand_version(void);
 
 #endif /* ! __IRC_CRYPT_H__ 1 */
