@@ -1,11 +1,11 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_crypt.c,v 1.4 1997/03/02 11:05:45 tri Exp $
+ *  $Id: irc_crypt.c,v 1.5 1997/03/04 14:41:28 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Sun Mar  2 12:51:23 1997 tri
+ *  Last modified: Tue Mar  4 16:37:10 1997 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997
  *  Timo J. Rinne <tri@iki.fi>
@@ -116,24 +116,22 @@ char *irc_encrypt_buffer(char *key, char *str, int *buflen)
 	srandom_called = 1;
     }
     len = *buflen;
-    buf = str_concat(irc_crc_string(str), str);
-    hlp = buf;
-    len += 8;
-    buf = str_concat(" ", buf);
-    buf[0] = random() & 255;
-    free(hlp);
-    len++;
     padlen = 8 - (len % 8);
+    if (padlen == 0)
+	padlen = 8;
+    buf = xmalloc(len + 9);
+    for (i = 0; i < padlen; i++)
+	buf[i] = random() & 255;
+    memcpy(&(buf[i + 8]), str, len);
+    hlp = irc_crc_buffer(str, len);
+    memcpy(&(buf[i]), hlp, 8);
+    free(hlp);
+    buf[0] = ((unsigned char)(buf[0] & 31)) |
+	     ((unsigned char)(((padlen - 1) & 7) << 5));
+    len += 8 + padlen;
 
-    for (i = 0; i < padlen; i++) {
-	hlp = buf;
-        buf = str_concat(" ", buf);
-	buf[0] = random() & 255;
-	free(hlp);
-	len++;
-    }
-/*    buf[0] = 255 & ((buf[0] & 31) | (padlen << 5)); */
-    buf[0] = 255 & (padlen << 5); 
+fprintf(stderr, ">>>str=\"%s\", len=%d, pad=%d\n", str, len, padlen);
+
     ExpandUserKey(build_idea_key(key), wk);
     ctx[0] = ctx[1] = ctx[2] = ctx[3] = 0;
     for (i = 0; i < (len / 8); i++) {
@@ -211,6 +209,7 @@ char *irc_decrypt_buffer(char *key, char *str, int *buflen)
     }
     buf[i * 8] = 0;
     padlen = (buf[0] >> 5) + 1;
+fprintf(stderr, ">>>str=\"...\", len=%d, pad=%d\n", len, padlen);
     hlp = strxdup(&(buf[padlen]));
     free(buf);
     buf = hlp;
