@@ -1,13 +1,13 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_crypt_int.h,v 1.3 1997/03/01 20:06:42 tri Exp $
+ *  $Id: irc_crypt_int.h,v 1.4 1999/01/05 16:54:26 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Sat Mar  1 21:54:28 1997 tri
+ *  Last modified: Tue Jan  5 18:54:20 1999 tri
  *  ----------------------------------------------------------------------
- *  Copyright © 1997
+ *  Copyright © 1997, 1999
  *  Timo J. Rinne <tri@iki.fi>
  * 
  *  Address: Cirion oy, PO-BOX 250, 00121 Helsinki, Finland
@@ -42,12 +42,12 @@ char *b64_decode_buffer(char *buf, int *len);
 
 /* CRYPT */
 char *irc_encrypt_buffer(char *key, char *str, int *len);
-char *irc_decrypt_buffer(char *key, char *str, int *len);
-char *irc_key_fingerprint(char *key);
+char *irc_decrypt_buffer(char *key, char *str, int *len, int version);
+char *irc_key_fingerprint(char *key, int version);
 
 /* Misc */
 char *str_concat(char *s1, char *s2);
-char *xmalloc(int l);
+void *xmalloc(int l);
 void *xcalloc(int n, int l);
 int strcicmp(char *s1, char *s2);
 int strciequal(char *s1, char *s2);

@@ -1,13 +1,13 @@
 /*   -*- c -*-
  *  
- *  $Id: misc.c,v 1.3 1997/03/01 20:06:11 tri Exp $
+ *  $Id: misc.c,v 1.4 1999/01/05 16:54:03 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Sat Mar  1 21:53:55 1997 tri
+ *  Last modified: Tue Jan  5 18:53:30 1999 tri
  *  ----------------------------------------------------------------------
- *  Copyright © 1997
+ *  Copyright © 1997, 1999
  *  Timo J. Rinne <tri@iki.fi>
  * 
  *  Address: Cirion oy, PO-BOX 250, 00121 Helsinki, Finland
@@ -28,7 +28,7 @@ char *str_concat(char *s1, char *s2)
     return r;
 }
 
-char *xmalloc(int l)
+void *xmalloc(int l)
 {
     char *r;
     r = (char *)malloc(l);
