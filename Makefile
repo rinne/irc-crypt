@@ -1,11 +1,11 @@
 #   -*- fundamental -*-
 # 
-#  $Id: Makefile,v 1.1 1997/03/01 20:03:49 tri Exp $
+#  $Id: Makefile,v 1.2 1997/03/01 20:07:45 tri Exp $
 #  ----------------------------------------------------------------------
 #  Makefile for irc encryption library
 #  ----------------------------------------------------------------------
 #  Created      : Sat Mar  1 21:02:50 1997 tri
-#  Last modified: Sat Mar  1 22:03:35 1997 tri
+#  Last modified: Sat Mar  1 22:05:06 1997 tri
 #  ----------------------------------------------------------------------
 #  Copyright © 1997
 #  Timo J. Rinne <tri@iki.fi>
@@ -33,5 +33,12 @@ libirccrypt.a: $(LIBOBJ)
 	rm -f libirccrypt.a
 	$(AR) -rvu libirccrypt.a $(LIBOBJ)
 	$(RANLIB) libirccrypt.a
+
+
+clean:
+	rm -f *.o *~
+
+clobber:
+	rm -f circ_shell libirccrypt.a *.o
 
 # eof (Makefile)
