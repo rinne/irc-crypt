@@ -1,11 +1,11 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_idea_v2.c,v 1.2 1999/01/07 14:49:06 tri Exp $
+ *  $Id: irc_idea_v2.c,v 1.3 1999/01/07 14:53:07 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Thu Jan  7 12:25:15 1999 tri
- *  Last modified: Thu Jan  7 16:47:41 1999 tri
+ *  Last modified: Thu Jan  7 16:50:23 1999 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997, 1999
  *  Timo J. Rinne <tri@iki.fi>
@@ -57,8 +57,6 @@ char *irc_idea_key_fingerprint_v2(char *key_str)
     s[6]  = r[15] = (b[6] >> 8) & 0xff;
     s[5]  = r[14] = b[7] & 0xff;
     s[4]  = r[13] = (b[7] >> 8) & 0xff;
-printf("r: %d %d %d %d %d %d %d %d %d\n", r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12]);
-printf("s: %d %d %d %d %d %d %d %d %d\n", s[4], s[5], s[6], s[7], s[8], s[9], s[10], s[11], s[12]);
     free(b);
     c1 = irc_crc_buffer_numeric((char *)(&r[4]), 18);
     s[0] = (c1 >> 24) & 0xff;
