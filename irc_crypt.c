@@ -1,11 +1,11 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_crypt.c,v 1.9 1999/01/07 12:45:53 tri Exp $
+ *  $Id: irc_crypt.c,v 1.10 1999/08/23 05:26:32 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Thu Jan  7 13:59:24 1999 tri
+ *  Last modified: Mon Aug 23 08:25:54 1999 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997, 1999
  *  Timo J. Rinne <tri@iki.fi>
@@ -68,7 +68,7 @@ char *irc_encrypt_buffer(char *key, char *str, int *buflen)
     padlen = 8 - (len % 8);
     if (padlen == 0)
 	padlen = 8;
-    buf = xmalloc(len + 9);
+    buf = xmalloc(len + 16 + 9);
     for (i = 0; i < padlen; i++)
 	buf[i] = random() & 255;
     memcpy(&(buf[i + 8]), str, len);
