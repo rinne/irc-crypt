@@ -1,13 +1,13 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_api.c,v 1.4 1997/03/02 10:30:43 tri Exp $
+ *  $Id: irc_api.c,v 1.5 1999/01/06 13:11:17 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Sun Mar  2 12:20:28 1997 tri
+ *  Last modified: Wed Jan  6 15:05:18 1999 tri
  *  ----------------------------------------------------------------------
- *  Copyright © 1997
+ *  Copyright © 1997, 1999
  *  Timo J. Rinne <tri@iki.fi>
  * 
  *  Address: Cirion oy, PO-BOX 250, 00121 Helsinki, Finland
@@ -38,8 +38,11 @@ static irc_default_key_t default_keys = NULL;
 static int num_default_keys = 0;
 static int spc_default_keys = 0;
 
+static int irc_default_key_expand_version = 3;
+
 static char *irc_get_known_key(char *fingerprint);
 static char *irc_get_default_key(char *addr);
+static int irc_add_known_key_internal(char *key, int version);
 
 static int irc_parse_encrypted_message(char *msg,
 				       char **type,
@@ -123,9 +126,10 @@ static char *irc_get_known_key(char *fingerprint)
     return NULL;
 }
 
-int irc_add_known_key(char *key)
+static int irc_add_known_key_internal(char *key, int version)
 {
     int i;
+    char *fp;
 
     if (!known_keys) {
 	known_keys = xcalloc(sizeof (irc_key), KEY_ALLOC_STEP);
@@ -141,13 +145,45 @@ int irc_add_known_key(char *key)
 	known_keys = n_keys;
 	spc_known_keys += KEY_ALLOC_STEP;
     }
+    fp = irc_key_fingerprint(key, version);
     for (i = 0; i < num_known_keys; i++)
-	if (!(strcmp(known_keys[i].key, key)))
+	if (!(strcmp(known_keys[i].fingerprint, fp))) {
+	    free(fp);
 	    return 1; /* Already there */
+	}
     known_keys[num_known_keys].key = strxdup(key);
-    known_keys[num_known_keys].fingerprint = irc_key_fingerprint(key);
+    known_keys[num_known_keys].fingerprint = fp;
     num_known_keys++;
     return 1;
+}
+
+int irc_set_key_expand_version(int n)
+{
+    int x;
+
+    if ((n == 1) || (n == 2) || (n == 3)) {
+	x = irc_default_key_expand_version;
+	irc_default_key_expand_version = n;
+	return x;
+    }
+    return 0;
+}
+
+int irc_key_expand_version()
+{
+    return irc_default_key_expand_version;
+}
+
+int irc_add_known_key(char *key)
+{
+    int r;
+
+    r = 1;
+    r &= irc_add_known_key_internal(key, 1);
+    r &= irc_add_known_key_internal(key, 2);
+    r &= irc_add_known_key_internal(key, 3);
+
+    return r;
 }
 
 int irc_delete_all_known_keys()
@@ -274,7 +310,21 @@ char *irc_encrypt_message_with_key(char *key, char *nick, char *message)
     char *r, *hlp, *hlp2;
     int x;
 
-    r = str_concat("|*E*|IDEA|1.0|", irc_key_fingerprint(key));
+    switch (irc_default_key_expand_version) {
+    case 1:
+	r = "|*E*|IDEA|1.0|";
+	break;
+    case 2:
+	r = "|*E*|IDEA|2.0|";
+	break;
+    case 3:
+	r = "|*E*|IDEA|3.0|";
+	break;
+    default:
+	return NULL;
+    }
+    r = str_concat(r, irc_key_fingerprint(key, 
+					  irc_default_key_expand_version));
     hlp = r;
     r = str_concat(r, "|");
     free(hlp);
@@ -312,6 +362,7 @@ int irc_decrypt_message(char *msg,
     char *hlp1, *hlp2, *nn, *ts, *tx;
     int x;
     unsigned int tv, ct;
+    int version;
 
     hlp1 = strxdup(msg);
     if (!(irc_parse_encrypted_message(hlp1, &type, &vmaj, &vmin,
@@ -326,7 +377,13 @@ int irc_decrypt_message(char *msg,
 	    *message = strxdup("Unknown algorithm");
 	goto i_d_m_fail;
     }
-    if ((vmaj != 1) || (vmin != 0)) {
+    if ((vmaj == 1) && (vmin == 0)) {
+	version = 1;
+    } else if ((vmaj == 2) && (vmin == 0)) {
+	version = 2;
+    } else if ((vmaj == 3) && (vmin == 0)) {
+	version = 3;
+    } else {
 	if (message)
 	    *message = strxdup("Unknown version");
 	goto i_d_m_fail;
@@ -338,7 +395,7 @@ int irc_decrypt_message(char *msg,
 	goto i_d_m_fail;
     }
     x = strlen(data);
-    hlp2 = irc_decrypt_buffer(hlp1, data, &x);
+    hlp2 = irc_decrypt_buffer(hlp1, data, &x, version);
     if (!hlp2) {
 	if (message)
 	    *message = strxdup("Decryption failed");
