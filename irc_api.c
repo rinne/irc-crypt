@@ -1,11 +1,11 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_api.c,v 1.1 1997/03/01 16:36:44 tri Exp $
+ *  $Id: irc_api.c,v 1.2 1997/03/01 18:47:47 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Sat Mar  1 18:31:36 1997 tri
+ *  Last modified: Sat Mar  1 20:01:38 1997 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997
  *  Timo J. Rinne <tri@iki.fi>
@@ -150,6 +150,23 @@ int irc_add_known_key(char *key)
     return 1;
 }
 
+int irc_delete_all_keys()
+{
+    int i;
+
+    for (i = 0; i < num_known_keys; i++) {
+	free(known_keys[i].key);
+	free(known_keys[i].fingerprint);
+    }
+    num_known_keys = 0;
+    for (i = 0; i < num_default_keys; i++) {
+	free(default_keys[i].key);
+	free(default_keys[i].addr);
+    }
+    num_default_keys = 0;
+    return 1;
+}
+
 int irc_delete_known_key(char *key)
 {
     int i;
@@ -196,7 +213,7 @@ int irc_add_default_key(char *addr, char *key)
 	spc_default_keys += KEY_ALLOC_STEP;
     }
     default_keys[num_default_keys].key = strxdup(key);
-    default_keys[num_default_keys].addr = addr;
+    default_keys[num_default_keys].addr = strxdup(addr);
     num_default_keys++;
     irc_add_known_key(key);
     return 1;
@@ -287,37 +304,37 @@ int irc_decrypt_message(char *msg,
 				      &fingerprint, &data))) {
 	free(hlp1);
 	if (message)
-	    *message = strxdup("Invalid message format.");
+	    *message = strxdup("Invalid message format");
 	return 0;
     }
     if (strcmp(type, "IDEA")) {
 	if (message)
-	    *message = strxdup("Unknown algorithm.");
+	    *message = strxdup("Unknown algorithm");
 	goto i_d_m_fail;
     }
     if ((vmaj != 1) || (vmin != 0)) {
 	if (message)
-	    *message = strxdup("Unknown version.");
+	    *message = strxdup("Unknown version");
 	goto i_d_m_fail;
     }
     hlp1 = irc_get_known_key(fingerprint);
     if (!hlp1) {
 	if (message)
-	    *message = strxdup("Unknown key.");
+	    *message = strxdup("Unknown key");
 	goto i_d_m_fail;
     }
     x = strlen(data);
     hlp2 = irc_decrypt_buffer(hlp1, data, &x);
     if (!hlp2) {
 	if (message)
-	    *message = strxdup("Decryption failed.");
+	    *message = strxdup("Decryption failed");
 	goto i_d_m_fail;
     }
     hlp1 = hlp2;
     nn = strsep(&hlp2, "");
     if ((!nn) || (!hlp2)) {
 	if (message)
-	    *message = strxdup("Invalid data contents.");
+	    *message = strxdup("Invalid data contents");
 	goto i_d_m_fail;
     }
     nn = strxdup(nn);
@@ -325,7 +342,7 @@ int irc_decrypt_message(char *msg,
     if ((!ts) || (!hlp2)) {
 	free(nn);
 	if (message)
-	    *message = strxdup("Invalid data contents.");
+	    *message = strxdup("Invalid data contents");
 	goto i_d_m_fail;
     }
     ts = strxdup(ts);

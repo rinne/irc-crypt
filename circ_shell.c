@@ -1,11 +1,11 @@
 /*   -*- c -*-
  *  
- *  $Id: circ_shell.c,v 1.1 1997/03/01 16:36:44 tri Exp $
+ *  $Id: circ_shell.c,v 1.2 1997/03/01 18:47:47 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Sat Mar  1 18:31:32 1997 tri
+ *  Last modified: Sat Mar  1 20:41:24 1997 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997
  *  Timo J. Rinne <tri@iki.fi>
@@ -18,51 +18,175 @@
  */
 #include "irc_crypt.h"
 
+void response(int err, char *errstr, int attr, char *attrstr, char *data)
+{
+    printf("%d%s%d%s%s\n", 
+	   err, 
+	   (err ? (errstr ? errstr : "Unknown") : "OK"),
+	   attr,
+	   attrstr ? attrstr : "",
+	   data ? data : "");
+}
+
+
+char *next_token(char **str, char *delim)
+{
+    char *r;
+
+    r = strsep(str, delim);
+    if (!(*str))
+	return r;
+    while (index(delim, **str))
+	(*str)++;
+    return r;
+}
+
+
+void cmd_quit(char *rest)
+{
+    response(0, NULL, 0, NULL, "QUIT");
+    exit(0);
+}
+
+void cmd_addkey(char *rest)
+{
+    char *cmd, *chnl, *key;
+
+    cmd = next_token(&rest, " \t");
+    if (!rest) {
+	response(2, "Syntax error", 0, NULL, NULL);
+	return;
+    }
+
+    if (strciequal("default", cmd)) {
+	chnl = next_token(&rest, " \t");
+	if ((!rest) || ((*rest) != ':')) {
+	    response(2, "Syntax error", 0, NULL, NULL);
+	    return;
+	}
+	irc_add_default_key(chnl, &(rest[1]));
+	response(0, NULL, 0, NULL, "ADDKEY");
+    } else if (strciequal("decrypt", cmd)) {
+	if ((!rest) || ((*rest) != ':')) {
+	    response(2, "Syntax error", 0, NULL, NULL);
+	    return;
+	}
+	irc_add_known_key(&(rest[1]));
+	response(0, NULL, 0, NULL, "ADDKEY");
+	return;
+    } else {
+	response(2, "Syntax error", 0, NULL, NULL);
+	return;
+    }
+}
+
+void cmd_deletekey(char *rest)
+{
+    char *cmd, *chnl, *key;
+    int r;
+
+    cmd = next_token(&rest, " \t");
+    if (strciequal("default", cmd)) {
+	if (!rest) {
+	    response(2, "Syntax error", 0, NULL, NULL);
+	    return;
+	}
+	chnl = next_token(&rest, " \t");
+	r = irc_delete_default_key(chnl);
+	response(0, NULL, (!r), ((!r) ? "No key for address" : NULL),
+		 "DELETEKEY");
+    } else if (strciequal("decrypt", cmd)) {
+	if ((!rest) || ((*rest) != ':')) {
+	    response(2, "Syntax error", 0, NULL, NULL);
+	    return;
+	}
+	r = irc_delete_known_key(&(rest[1]));
+	response(0, NULL, (!r), ((!r) ? "Not a known key" : NULL),
+		 "DELETEKEY");
+    } else if (strciequal("all", cmd)) {
+	irc_delete_all_keys();
+	response(0, NULL, 0, NULL, "DELETEKEY");
+	return;
+    } else {
+	response(2, "Syntax error", 0, NULL, NULL);
+	return;
+    }
+}
+
+void cmd_encrypt(char *rest)
+{
+    char *nick, *addr;
+    char *msg;
+    nick = next_token(&rest, " \t");
+    if (!rest) {
+	response(2, "Syntax error", 0, NULL, NULL);
+	return;
+    }
+    addr = next_token(&rest, " \t");
+    if ((!rest) || ((*rest) != ':')) {
+	response(2, "Syntax error", 0, NULL, NULL);
+	return;
+    }
+    msg = irc_encrypt_message_to_address(addr, nick, &(rest[1]));
+    if (!msg) {
+	response(4, "Encryption error", 0, NULL, "No key");
+	return;
+    }
+    response(0, NULL, 0, NULL, msg);
+    free(msg);
+    return;
+}
+
+void cmd_decrypt(char *rest)
+{
+    char *nick, *data;
+    int tdiff;
+    int r;
+
+    if ((*rest) != ':') {
+	response(2, "Syntax error", 0, NULL, NULL);
+	return;
+    }
+    r = irc_decrypt_message(&(rest[1]), &data, &nick, &tdiff);
+    if (!r) {
+	response(3, "Decryption error", 0, NULL, data);
+	return;
+    }
+    response(0, NULL, tdiff, nick, data);
+    free(nick);
+    free(data);
+    return;
+}
+
+void cmd_unknown(char *rest)
+{
+    response(1, "Unknown command.", 0, NULL, "Ignored");
+    return;
+}
+
 main()
 {
+    char *line;
+    char *cmd, *rest, *hlp;
 
-#if 0
-    unsigned short *key;
-    int x;
-    char *hlp, *hlp1, *hlp2, *hlp3;
-
-    printf("kukkuu = %s\n", irc_crc_string("kukkuu"));
-    printf("foo    = %s\n", irc_crc_string("foo"));
-
-    x = 12;
-    printf(">>>%s<<<", b64_encode_buffer("kukkuureseti", &x));
-    printf(">>>%d<<<\n", x);
-    
-    x = 60;
-    printf(">>>%s<<<", b64_decode_buffer("UGl0a+Qgb24gbWF0a2EgamEga2l25ORyaSBvbiByYXNrYXMga2FudGFhLg==", &x));
-    printf(">>>%d<<<\n", x);
-
-    x = 3;
-    printf(">>>%s<<<", irc_encrypt_buffer("foo", "foo", &x));
-    printf(">>>%d<<<\n", x);
-
-    x = 24;
-    printf(">>>%s<<<", irc_decrypt_buffer("foo", "Nhj1IEzJwwhqtdUQer/K3A==", &x));
-    printf(">>>%d<<<\n", x);
-
-    x = 88;
-    printf(">>>%s<<<", irc_decrypt_buffer("foo", "tiCaSIwpU/ySCvQNiKfGUcZ4Ccw74+ruRWgttFnWMh22aMzWcgJ6cY5MJKrWo2VgVE3QhaKm6MB1+fNIluENvA==", &x));
-    printf(">>>%d<<<\n", x);
-
-
-    printf("%s -> %s\n", "foo", irc_key_fingerprint("foo"));
-
-    printf(">> %s\n", irc_encrypt_message_with_key("foo", "Rinne", "kukkuureset"));
-
-
-    irc_add_default_key("#zap", "foo");
-    irc_add_default_key("#kukkuu", "bar");
-    printf(">> %s\n", irc_encrypt_message_to_address("#kukkUU", "Rinne", "kukkuureset"));
-    printf(">> %s\n", irc_encrypt_message_to_address("#zap", "Rinne", "kukkuureset"));
-
-    if (irc_decrypt_message(irc_encrypt_message_with_key("foo", "Rinne", "kukkuureset"), &hlp1, &hlp2, &x)) {
-	printf("1=\"%s\", 2=\"%s\", x=\"%d\"\n", hlp1, hlp2, x);
+    while (line = read_line(stdin)) {
+	hlp = line;
+	cmd = next_token(&hlp, " \t");
+	rest = hlp;
+	if (strciequal("quit", cmd))
+	    cmd_quit(rest);
+	else if (strciequal("addkey", cmd))
+	    cmd_addkey(rest);
+	else if (strciequal("deletekey", cmd))
+	    cmd_deletekey(rest);
+	else if (strciequal("encrypt", cmd))
+	    cmd_encrypt(rest);
+	else if (strciequal("decrypt", cmd))
+	    cmd_decrypt(rest);
+	else
+	    cmd_unknown(rest);
+	free(line);
     }
+    cmd_quit(NULL);
     exit(0);
-#endif
 }

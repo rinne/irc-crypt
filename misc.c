@@ -1,11 +1,11 @@
 /*   -*- c -*-
  *  
- *  $Id: misc.c,v 1.1 1997/03/01 16:36:44 tri Exp $
+ *  $Id: misc.c,v 1.2 1997/03/01 18:47:47 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Sat Mar  1 18:33:54 1997 tri
+ *  Last modified: Sat Mar  1 18:41:43 1997 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997
  *  Timo J. Rinne <tri@iki.fi>
@@ -48,6 +48,11 @@ void *xcalloc(int n, int l)
 	exit(1);
     }
     return r;
+}
+
+int strciequal(char *s1, char *s2)
+{
+    return (strcicmp(s1, s2) == 0);
 }
 
 int strcicmp(char *s1, char *s2)

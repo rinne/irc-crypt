@@ -1,11 +1,11 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_b64.c,v 1.1 1997/03/01 16:36:44 tri Exp $
+ *  $Id: irc_b64.c,v 1.2 1997/03/01 18:47:47 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Sat Mar  1 18:31:48 1997 tri
+ *  Last modified: Sat Mar  1 20:44:59 1997 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997
  *  Timo J. Rinne <tri@iki.fi>
@@ -55,7 +55,7 @@ char *b64_encode_buffer(char *buf, int *buflen)
 	if ((i + 1) == len)
 	    r[j - 1] = r[j - 2] = '=';
 	if ((i + 2) == len)
-	    r[j - 2] = '=';
+	    r[j - 1] = '=';
     }
     *buflen = j;
     return r;
