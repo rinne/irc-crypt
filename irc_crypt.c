@@ -1,14 +1,16 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_crypt.c,v 1.7 1999/01/06 13:10:23 tri Exp $
+ *  $Id: irc_crypt.c,v 1.8 1999/01/06 13:23:23 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Wed Jan  6 15:08:55 1999 tri
+ *  Last modified: Wed Jan  6 15:22:17 1999 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997, 1999
  *  Timo J. Rinne <tri@iki.fi>
+ * 
+ *  See file COPYRIGHT for license details.
  * 
  *  Address: Cirion oy, PO-BOX 250, 00121 Helsinki, Finland
  *  ----------------------------------------------------------------------

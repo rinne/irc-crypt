@@ -1,14 +1,16 @@
 /*   -*- c -*-
  *  
- *  $Id: misc.c,v 1.4 1999/01/05 16:54:03 tri Exp $
+ *  $Id: misc.c,v 1.5 1999/01/06 13:23:23 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Tue Jan  5 18:53:30 1999 tri
+ *  Last modified: Wed Jan  6 15:22:12 1999 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997, 1999
  *  Timo J. Rinne <tri@iki.fi>
+ * 
+ *  See file COPYRIGHT for license details.
  * 
  *  Address: Cirion oy, PO-BOX 250, 00121 Helsinki, Finland
  *  ----------------------------------------------------------------------
