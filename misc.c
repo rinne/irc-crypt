@@ -1,11 +1,11 @@
 /*   -*- c -*-
  *  
- *  $Id: misc.c,v 1.2 1997/03/01 18:47:47 tri Exp $
+ *  $Id: misc.c,v 1.3 1997/03/01 20:06:11 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Sat Mar  1 18:41:43 1997 tri
+ *  Last modified: Sat Mar  1 21:53:55 1997 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997
  *  Timo J. Rinne <tri@iki.fi>
@@ -16,7 +16,7 @@
  *  shall the author be liable for any damages caused (directly or
  *  otherwise) by the use of this software.
  */
-#include "irc_crypt.h"
+#include "irc_crypt_int.h"
 
 char *str_concat(char *s1, char *s2)
 {
@@ -77,36 +77,3 @@ char *strxdup(char *str)
     return str_concat("", str);
 }
 
-#define BUF_MAL_STEP 64
-
-char *read_line(FILE *f)
-{
-    char *buf, *ptr, *nbuf;
-    int  r=0, c, bsiz;
-    
-    if(NULL == (buf = malloc(BUF_MAL_STEP * sizeof(char))))
-      return(NULL);
-    
-    bsiz = BUF_MAL_STEP;
-    ptr = buf;
-    while(EOF != (c = fgetc(f)) && c != '\n') {
-        r++;
-        *ptr++ = c;
-        if(r + 3 >= bsiz) {
-            if(NULL == (nbuf = malloc(bsiz + BUF_MAL_STEP * sizeof(char)))) {
-                return(NULL);
-            }
-            strncpy(nbuf, buf, bsiz);
-            free(buf);
-            buf = nbuf;
-            ptr = &buf[r];
-            bsiz += BUF_MAL_STEP;
-        }
-    }
-    if(!r && EOF ==c) {
-        free(buf);
-        return(NULL);
-    }
-    *ptr = 0;
-    return(buf);
-}

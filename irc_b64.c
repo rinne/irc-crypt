@@ -1,6 +1,6 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_b64.c,v 1.2 1997/03/01 18:47:47 tri Exp $
+ *  $Id: irc_b64.c,v 1.3 1997/03/01 20:06:11 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
@@ -16,7 +16,7 @@
  *  shall the author be liable for any damages caused (directly or
  *  otherwise) by the use of this software.
  */
-#include "irc_crypt.h"
+#include "irc_crypt_int.h"
 
 static char *b64_alpha =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";

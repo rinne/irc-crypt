@@ -1,6 +1,6 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_crc.c,v 1.1 1997/03/01 16:36:44 tri Exp $
+ *  $Id: irc_crc.c,v 1.2 1997/03/01 20:06:11 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
@@ -16,7 +16,7 @@
  *  shall the author be liable for any damages caused (directly or
  *  otherwise) by the use of this software.
  */
-#include "irc_crypt.h"
+#include "irc_crypt_int.h"
 #include "crc32.h"
 
 char *irc_crc_string(char *str)
