@@ -1,11 +1,11 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_idea_v2.c,v 1.1 1999/01/07 12:45:53 tri Exp $
+ *  $Id: irc_idea_v2.c,v 1.2 1999/01/07 14:49:06 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Thu Jan  7 12:25:15 1999 tri
- *  Last modified: Thu Jan  7 14:40:19 1999 tri
+ *  Last modified: Thu Jan  7 16:47:41 1999 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997, 1999
  *  Timo J. Rinne <tri@iki.fi>
@@ -39,24 +39,26 @@ char *irc_idea_key_fingerprint_v2(char *key_str)
 	b[4] == 0 && b[5] == 0 && b[6] == 0 && b[7] == 0) {
 	return strxdup("000000000000");
     }
-    r[4]  = s[13] = (b[3] >> 8) & 0xff;
-    r[5]  = s[14] = b[3] & 0xff;
-    r[6]  = s[15] = (b[2] >> 8) & 0xff;
-    r[7]  = s[16] = b[2] & 0xff;
-    r[8]  = s[17] = (b[1] >> 8) & 0xff;
-    r[9]  = s[18] = b[1] & 0xff;
-    r[10] = s[19] = (b[0] >> 8) & 0xff;
-    r[11] = s[20] = b[0] & 0xff;
     r[12] = s[21] = 0;
-    r[13] = s[4]  = (b[7] >> 8) & 0xff;
-    r[14] = s[5]  = b[7] & 0xff;
-    r[15] = s[6]  = (b[6] >> 8) & 0xff;
-    r[16] = s[7]  = b[6] & 0xff;
-    r[17] = s[8]  = (b[5] >> 8) & 0xff;
-    r[18] = s[9]  = b[5] & 0xff;
-    r[19] = s[10] = (b[4] >> 8) & 0xff;
-    r[20] = s[11] = b[4] & 0xff;
-    r[21] = s[12] = 255;
+    r[11] = s[20] = b[0] & 0xff;
+    r[10] = s[19] = (b[0] >> 8) & 0xff;
+    r[9]  = s[18] = b[1] & 0xff;
+    r[8]  = s[17] = (b[1] >> 8) & 0xff;
+    r[7]  = s[16] = b[2] & 0xff;
+    r[6]  = s[15] = (b[2] >> 8) & 0xff;
+    r[5]  = s[14] = b[3] & 0xff;
+    r[4]  = s[13] = (b[3] >> 8) & 0xff;
+    s[12] = r[21] = 255;
+    s[11] = r[20] = b[4] & 0xff;
+    s[10] = r[19] = (b[4] >> 8) & 0xff;
+    s[9]  = r[18] = b[5] & 0xff;
+    s[8]  = r[17] = (b[5] >> 8) & 0xff;
+    s[7]  = r[16] = b[6] & 0xff;
+    s[6]  = r[15] = (b[6] >> 8) & 0xff;
+    s[5]  = r[14] = b[7] & 0xff;
+    s[4]  = r[13] = (b[7] >> 8) & 0xff;
+printf("r: %d %d %d %d %d %d %d %d %d\n", r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12]);
+printf("s: %d %d %d %d %d %d %d %d %d\n", s[4], s[5], s[6], s[7], s[8], s[9], s[10], s[11], s[12]);
     free(b);
     c1 = irc_crc_buffer_numeric((char *)(&r[4]), 18);
     s[0] = (c1 >> 24) & 0xff;
@@ -110,7 +112,7 @@ unsigned short *irc_idea_key_expand_v2(char *str, int len)
 						&l1);
     s2 = (unsigned char *)idea_expand_string_v2((char *)&(hlp[len / 4]), 
 						(len / 2) - (len / 4), 
-						0, 
+						85, 
 						len & 0xff, 
 						&l2);
     s3 = (unsigned char *)idea_expand_string_v2((char *)&(hlp[len / 2]), 
@@ -156,8 +158,10 @@ static char *idea_expand_string_v2(char *str,
     unsigned int crc;
     int x;
 
+
     if (len < 0)
 	len = strlen(str);
+printf("len: %d\n", len + 2);
     r = xmalloc(len + 7);
     r[4] = (unsigned char)(salt1 & 0xff);
     r[5] = (unsigned char)(salt2 & 0xff);
