@@ -1,11 +1,11 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_idea_v2.c,v 1.3 1999/01/07 14:53:07 tri Exp $
+ *  $Id: irc_idea_v2.c,v 1.4 1999/01/07 14:55:37 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Thu Jan  7 12:25:15 1999 tri
- *  Last modified: Thu Jan  7 16:50:23 1999 tri
+ *  Last modified: Thu Jan  7 16:55:33 1999 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997, 1999
  *  Timo J. Rinne <tri@iki.fi>
@@ -159,7 +159,6 @@ static char *idea_expand_string_v2(char *str,
 
     if (len < 0)
 	len = strlen(str);
-printf("len: %d\n", len + 2);
     r = xmalloc(len + 7);
     r[4] = (unsigned char)(salt1 & 0xff);
     r[5] = (unsigned char)(salt2 & 0xff);
