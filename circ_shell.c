@@ -1,11 +1,11 @@
 /*   -*- c -*-
  *  
- *  $Id: circ_shell.c,v 1.3 1997/03/01 20:06:11 tri Exp $
+ *  $Id: circ_shell.c,v 1.4 1997/03/02 11:05:45 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Sat Mar  1 21:55:04 1997 tri
+ *  Last modified: Sun Mar  2 13:01:21 1997 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997
  *  Timo J. Rinne <tri@iki.fi>
@@ -152,12 +152,12 @@ void cmd_encrypt(char *rest)
 {
     char *nick, *addr;
     char *msg;
-    nick = next_token(&rest, " \t");
+    addr = next_token(&rest, " \t");
     if (!rest) {
 	response(2, "Syntax error", 0, NULL, NULL);
 	return;
     }
-    addr = next_token(&rest, " \t");
+    nick = next_token(&rest, " \t");
     if ((!rest) || ((*rest) != ':')) {
 	response(2, "Syntax error", 0, NULL, NULL);
 	return;
@@ -193,6 +193,42 @@ void cmd_decrypt(char *rest)
     return;
 }
 
+void cmd_help(char *rest)
+{
+    printf("  Commands: ADDKEY, DELETEKEY, ENCRYPT, DECRYPT, HELP, QUIT\n\n");
+    printf("    ADDKEY DECRYPT :key\n");
+    printf("    Add key (string after colon) to the known key pool.\n\n");
+    printf("    ADDKEY DEFAULT address :key\n");
+    printf("    Add key (string after colon) as a default key for channel.\n\n");
+    printf("    DELETEKEY ALL\n");
+    printf("    Delete all (default and known) keys from keypools.\n\n");
+    printf("    DELETEKEY DECRYPT :key\n");
+    printf("    Delete key from known key pool.\n\n");
+    printf("    DELETEKEY DEFAULT address\n");
+    printf("    Delete default key associated woth address.\n\n");
+    printf("    ENCRYPT address nick :message\n");
+    printf("    Encrypt message to address with a default key associated with address.\n");
+    printf("    Embed nick into the message.\n\n");
+    printf("    DECRYPT :message\n");
+    printf("    Decrypt message if possible.\n\n");
+    printf("    HELP\n");
+    printf("    Get this help\n\n");
+    printf("    QUIT\n");
+    printf("    Quit this program\n\n");
+    printf("  Responses:\n\n");
+    printf("    All responses contain error code, error message, response attribute,\n");
+    printf("    response attribute string, and response string.  Fields are separated\n");
+    printf("    with ^A (ascii = 1).   Success response is usually 0^AOK^A0^A^A, but\n");
+    printf("    empty fields can contain additional information.\n\n");
+    printf("    The only complicated success response is response to decrypt command.\n");
+    printf("    Response is 0^AOK^Atimestamp-error^Anick^Amessage-data.  Timestamp\n");
+    printf("    error is difference between current time and timestamp embedded in \n");
+    printf("    the message.  Nick is the embedded nickname.  Message-data is the\n");
+    printf("    decrypted message.\n\n");
+    response(0, NULL, 0, NULL, "HELP");
+    return;
+}
+
 void cmd_unknown(char *rest)
 {
     response(1, "Unknown command.", 0, NULL, "Ignored");
@@ -218,6 +254,8 @@ main()
 	    cmd_encrypt(rest);
 	else if (strciequal("decrypt", cmd))
 	    cmd_decrypt(rest);
+	else if (strciequal("help", cmd))
+	    cmd_help(rest);
 	else
 	    cmd_unknown(rest);
 	free(line);
