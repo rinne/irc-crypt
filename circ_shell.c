@@ -1,13 +1,13 @@
 /*   -*- c -*-
  *  
- *  $Id: circ_shell.c,v 1.6 1999/01/06 13:10:48 tri Exp $
+ *  $Id: circ_shell.c,v 1.7 1999/01/06 13:13:28 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Sun Oct 12 17:00:48 1997 tri
+ *  Last modified: Wed Jan  6 15:13:02 1999 tri
  *  ----------------------------------------------------------------------
- *  Copyright © 1997
+ *  Copyright © 1997, 1999
  *  Timo J. Rinne <tri@iki.fi>
  * 
  *  Address: Cirion oy, PO-BOX 250, 00121 Helsinki, Finland
@@ -175,7 +175,7 @@ void cmd_encrypt(char *rest)
 void cmd_decrypt(char *rest)
 {
     char *nick, *data;
-    int tdiff;
+    unsigned int tdiff;
     int r;
 
     if ((*rest) != ':') {
@@ -187,7 +187,7 @@ void cmd_decrypt(char *rest)
 	response(3, "Decryption error", 0, NULL, data);
 	return;
     }
-    response(0, NULL, tdiff, nick, data);
+    response(0, NULL, (int)tdiff, nick, data);
     free(nick);
     free(data);
     return;
