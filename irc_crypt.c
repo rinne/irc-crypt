@@ -1,11 +1,11 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_crypt.c,v 1.3 1997/03/01 20:06:11 tri Exp $
+ *  $Id: irc_crypt.c,v 1.4 1997/03/02 11:05:45 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Sat Mar  1 20:40:30 1997 tri
+ *  Last modified: Sun Mar  2 12:51:23 1997 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997
  *  Timo J. Rinne <tri@iki.fi>
@@ -132,7 +132,8 @@ char *irc_encrypt_buffer(char *key, char *str, int *buflen)
 	free(hlp);
 	len++;
     }
-    buf[0] = 255 & ((buf[0] & 31) | (padlen << 5));
+/*    buf[0] = 255 & ((buf[0] & 31) | (padlen << 5)); */
+    buf[0] = 255 & (padlen << 5); 
     ExpandUserKey(build_idea_key(key), wk);
     ctx[0] = ctx[1] = ctx[2] = ctx[3] = 0;
     for (i = 0; i < (len / 8); i++) {
