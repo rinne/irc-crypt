@@ -1,11 +1,11 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_idea_v3.c,v 1.1 1999/01/07 12:45:53 tri Exp $
+ *  $Id: irc_idea_v3.c,v 1.2 1999/01/07 15:42:47 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Thu Jan  7 12:25:15 1999 tri
- *  Last modified: Thu Jan  7 13:51:09 1999 tri
+ *  Last modified: Thu Jan  7 17:41:43 1999 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997, 1999
  *  Timo J. Rinne <tri@iki.fi>
@@ -159,7 +159,7 @@ static unsigned short *idea_v3_cleartext_string_to_block_list(char *str,
     padlen = 8 - (len % 8);
     if (padlen == 0)
         padlen = 8;
-    buf = xmalloc(len + 9);
+    buf = xmalloc(len + 20);
     for (i = 0; i < padlen; i++)
         buf[i] = 0;
     memcpy(&(buf[i + 8]), str, len);
