@@ -1,6 +1,6 @@
 #   -*- fundamental -*-
 # 
-#  $Id: Makefile,v 1.3 1999/01/07 15:01:37 tri Exp $
+#  $Id: Makefile,v 1.4 2004/07/27 16:10:17 tri Exp $
 #  ----------------------------------------------------------------------
 #  Makefile for irc encryption library
 #  ----------------------------------------------------------------------
@@ -9,8 +9,6 @@
 #  ----------------------------------------------------------------------
 #  Copyright © 1997, 1999
 #  Timo J. Rinne <tri@iki.fi>
-# 
-#  Address: Cirion oy, PO-BOX 250, 00121 Helsinki, Finland
 #  ----------------------------------------------------------------------
 #  Any express or implied warranties are disclaimed.  In no event
 #  shall the author be liable for any damages caused (directly or

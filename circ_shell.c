@@ -1,18 +1,16 @@
 /*   -*- c -*-
  *  
- *  $Id: circ_shell.c,v 1.8 1999/01/06 13:23:23 tri Exp $
+ *  $Id: circ_shell.c,v 1.9 2004/07/27 16:10:17 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Wed Jan  6 15:22:46 1999 tri
+ *  Last modified: Tue Jul 27 19:09:25 2004 tri
  *  ----------------------------------------------------------------------
- *  Copyright © 1997, 1999
+ *  Copyright © 1997, 1999, 2002, 2004
  *  Timo J. Rinne <tri@iki.fi>
  * 
  *  See file COPYRIGHT for license details.
- * 
- *  Address: Cirion oy, PO-BOX 250, 00121 Helsinki, Finland
  *  ----------------------------------------------------------------------
  *  Any express or implied warranties are disclaimed.  In no event
  *  shall the author be liable for any damages caused (directly or
@@ -31,6 +29,7 @@ void response(int err, char *errstr, int attr, char *attrstr, char *data)
 	   attr,
 	   attrstr ? attrstr : "",
 	   data ? data : "");
+    fflush(stdout);
 }
 
 #define BUF_MAL_STEP 64
