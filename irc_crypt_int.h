@@ -1,11 +1,11 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_crypt_int.h,v 1.2 1997/03/01 18:47:47 tri Exp $
+ *  $Id: irc_crypt_int.h,v 1.3 1997/03/01 20:06:42 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Sat Mar  1 19:44:50 1997 tri
+ *  Last modified: Sat Mar  1 21:54:28 1997 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997
  *  Timo J. Rinne <tri@iki.fi>
@@ -16,25 +16,15 @@
  *  shall the author be liable for any damages caused (directly or
  *  otherwise) by the use of this software.
  */
-#ifndef __IRC_CRYPT_H__
-#define __IRC_CRYPT_H__ 1
+#ifndef __IRC_CRYPT_INT_H__
+#define __IRC_CRYPT_INT_H__ 1
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
-/* IRC */
-int irc_add_known_key(char *key);
-int irc_delete_known_key(char *key);
-int irc_add_default_key(char *addr, char *key);
-int irc_delete_default_key(char *addr);
-int irc_delete_all_keys(void);
-char *irc_encrypt_message_to_address(char *addr, char *nick, char *message);
-char *irc_encrypt_message_with_key(char *key, char *nick, char *message);
-int irc_decrypt_message(char *msg, 
-			char **message, char **nick, unsigned int *tdiff);
-int irc_is_encrypted_message_p(char *msg);
+#include "irc_crypt.h"
 
 /* CRC */
 char *irc_crc_string(char *str);
@@ -62,6 +52,5 @@ void *xcalloc(int n, int l);
 int strcicmp(char *s1, char *s2);
 int strciequal(char *s1, char *s2);
 char *strxdup(char *str);
-char *read_line(FILE *f);
 
-#endif /* ! __IRC_CRYPT_H__ 1 */
+#endif /* ! __IRC_CRYPT_INT_H__ 1 */
