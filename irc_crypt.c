@@ -1,11 +1,11 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_crypt.c,v 1.5 1997/03/04 14:41:28 tri Exp $
+ *  $Id: irc_crypt.c,v 1.6 1997/05/06 07:48:49 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Tue Mar  4 16:37:10 1997 tri
+ *  Last modified: Tue May  6 10:43:43 1997 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997
  *  Timo J. Rinne <tri@iki.fi>
@@ -21,7 +21,7 @@
 
 static unsigned short *build_idea_key(char *str)
 {
-    static short key[8];
+    static unsigned short key[8];
     char *keystr;
     char *hlp, *hlp2;
     char tmp[16];
@@ -98,7 +98,7 @@ char *irc_key_fingerprint(char *key)
     buf[1] = b[7] & 255;
     buf[0] = (b[7] >> 8) & 255;
 
-    return irc_crc_buffer(buf, 16);
+    return irc_crc_buffer((char *)buf, 16);
 }
 
 char *irc_encrypt_buffer(char *key, char *str, int *buflen)
@@ -130,7 +130,7 @@ char *irc_encrypt_buffer(char *key, char *str, int *buflen)
 	     ((unsigned char)(((padlen - 1) & 7) << 5));
     len += 8 + padlen;
 
-fprintf(stderr, ">>>str=\"%s\", len=%d, pad=%d\n", str, len, padlen);
+/*fprintf(stderr, ">>>str=\"%s\", len=%d, pad=%d\n", str, len, padlen);*/
 
     ExpandUserKey(build_idea_key(key), wk);
     ctx[0] = ctx[1] = ctx[2] = ctx[3] = 0;
