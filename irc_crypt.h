@@ -1,11 +1,11 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_crypt.h,v 1.4 1999/01/06 13:23:23 tri Exp $
+ *  $Id: irc_crypt.h,v 1.5 1999/01/07 12:45:53 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Wed Jan  6 15:21:59 1999 tri
+ *  Last modified: Thu Jan  7 13:59:49 1999 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997, 1999
  *  Timo J. Rinne <tri@iki.fi>
@@ -104,5 +104,15 @@ int irc_set_key_expand_version(int n);
  * Return current default key expand version.
  */
 int irc_key_expand_version(void);
+
+/*
+ * Expand a crypto-key from null-terminated string.
+ */
+unsigned short *irc_build_key(char *str, int version);
+
+/*
+ * Expand a crypto-key-fingerprint from null-terminated string.
+ */
+char *irc_key_fingerprint(char *key, int version);
 
 #endif /* ! __IRC_CRYPT_H__ 1 */

@@ -1,11 +1,11 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_crypt_int.h,v 1.5 1999/01/06 13:23:23 tri Exp $
+ *  $Id: irc_crypt_int.h,v 1.6 1999/01/07 12:45:53 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Wed Jan  6 15:21:52 1999 tri
+ *  Last modified: Thu Jan  7 12:24:10 1999 tri
  *  ----------------------------------------------------------------------
  *  Copyright © 1997, 1999
  *  Timo J. Rinne <tri@iki.fi>
@@ -46,6 +46,14 @@ char *b64_decode_buffer(char *buf, int *len);
 char *irc_encrypt_buffer(char *key, char *str, int *len);
 char *irc_decrypt_buffer(char *key, char *str, int *len, int version);
 char *irc_key_fingerprint(char *key, int version);
+
+/* irc_idea_v[123] */
+char *irc_idea_key_fingerprint_v1(char *key_str);
+unsigned short *irc_idea_key_expand_v1(char *key_str, int key_str_len);
+char *irc_idea_key_fingerprint_v2(char *key_str);
+unsigned short *irc_idea_key_expand_v2(char *key_str, int key_str_len);
+char *irc_idea_key_fingerprint_v3(char *key_str);
+unsigned short *irc_idea_key_expand_v3(char *key_str, int key_str_len);
 
 /* Misc */
 char *str_concat(char *s1, char *s2);
