@@ -1,13 +1,12 @@
 #   -*- fundamental -*-
 # 
-#  $Id: Makefile,v 1.4 2004/07/27 16:10:17 tri Exp $
 #  ----------------------------------------------------------------------
 #  Makefile for irc encryption library
 #  ----------------------------------------------------------------------
 #  Created      : Sat Mar  1 21:02:50 1997 tri
-#  Last modified: Thu Jan  7 14:00:55 1999 tri
+#  Last modified: Sat Feb  4 20:41:48 2017 tri
 #  ----------------------------------------------------------------------
-#  Copyright © 1997, 1999
+#  Copyright Â© 1997, 1999, 2017
 #  Timo J. Rinne <tri@iki.fi>
 #  ----------------------------------------------------------------------
 #  Any express or implied warranties are disclaimed.  In no event

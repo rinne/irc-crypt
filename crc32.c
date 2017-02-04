@@ -1,17 +1,16 @@
 /*   -*- c -*-
  *  
- *  $Id: crc32.c,v 1.1 1997/03/01 16:36:44 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Fri Feb 28 18:28:18 1997 tri
- *  Last modified: Sat Mar  1 18:31:08 1997 tri
+ *  Last modified: Sat Feb  4 20:41:33 2017 tri
  *  ----------------------------------------------------------------------
  */
 #include "crc32.h"
 
-  /* ============================================================= */
-  /*  COPYRIGHT (C) 1986 Gary S. Brown.  You may use this program, or       */
+  /* ====================================================================== */
+  /*  COPYRIGHT © 1986 Gary S. Brown.  You may use this program, or         */
   /*  code or tables extracted from it, as desired without restriction.     */
   /*                                                                        */
   /*  First, the polynomial itself and its table of feedback terms.  The    */

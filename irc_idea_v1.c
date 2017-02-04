@@ -1,13 +1,12 @@
 /*   -*- c -*-
  *  
- *  $Id: irc_idea_v1.c,v 1.2 2004/07/27 16:10:17 tri Exp $
  *  ----------------------------------------------------------------------
  *  Crypto for IRC.
  *  ----------------------------------------------------------------------
  *  Created      : Thu Jan  7 12:25:15 1999 tri
- *  Last modified: Tue Jul 27 19:09:00 2004 tri
+ *  Last modified: Sat Feb  4 20:41:13 2017 tri
  *  ----------------------------------------------------------------------
- *  Copyright © 1997, 1999, 2004
+ *  Copyright Â© 1997, 1999, 2004, 2017
  *  Timo J. Rinne <tri@iki.fi>
  *
  *  See file COPYRIGHT for license details.
